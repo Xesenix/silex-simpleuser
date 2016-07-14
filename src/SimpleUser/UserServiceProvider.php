@@ -124,6 +124,8 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
             $app['user.options'] = $options;
         });
 
+        $app['user.templating'] = $app->share(function($app) { return $app['twig']; });
+
         // Token generator.
         $app['user.tokenGenerator'] = $app->share(function($app) { return new TokenGenerator($app['logger']); });
 

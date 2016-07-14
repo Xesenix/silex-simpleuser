@@ -105,7 +105,7 @@ class UserController
                     $app['user.mailer']->sendConfirmationMessage($user);
 
                     // Render the "go check your email" page.
-                    return $app['twig']->render($this->getTemplate('register-confirmation-sent'), array(
+                    return $app['user.templating']->render($this->getTemplate('register-confirmation-sent'), array(
                         'layout_template' => $this->getTemplate('layout'),
                         'email' => $user->getEmail(),
                     ));
@@ -124,7 +124,7 @@ class UserController
             }
         }
 
-        return $app['twig']->render($this->getTemplate('register'), array(
+        return $app['user.templating']->render($this->getTemplate('register'), array(
             'layout_template' => $this->getTemplate('layout'),
             'error' => isset($error) ? $error : null,
             'name' => $request->request->get('name'),
@@ -180,7 +180,7 @@ class UserController
             // The Security system throws this exception before actually checking if the password was valid.
             $user = $this->userManager->refreshUser($authException->getUser());
 
-            return $app['twig']->render($this->getTemplate('login-confirmation-needed'), array(
+            return $app['user.templating']->render($this->getTemplate('login-confirmation-needed'), array(
                 'layout_template' => $this->getTemplate('layout'),
                 'email' => $user->getEmail(),
                 'fromAddress' => $app['user.mailer']->getFromAddress(),
@@ -188,7 +188,7 @@ class UserController
             ));
         }
 
-        return $app['twig']->render($this->getTemplate('login'), array(
+        return $app['user.templating']->render($this->getTemplate('login'), array(
             'layout_template' => $this->getTemplate('layout'),
             'error' => $authException ? $authException->getMessageKey() : null,
             'last_username' => $app['session']->get('_security.last_username'),
@@ -221,7 +221,7 @@ class UserController
         $app['user.mailer']->sendConfirmationMessage($user);
 
         // Render the "go check your email" page.
-        return $app['twig']->render($this->getTemplate('register-confirmation-sent'), array(
+        return $app['user.templating']->render($this->getTemplate('register-confirmation-sent'), array(
             'layout_template' => $this->getTemplate('layout'),
             'email' => $user->getEmail(),
         ));
@@ -265,7 +265,7 @@ class UserController
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $email = '';
         }
 
-        return $app['twig']->render($this->getTemplate('forgot-password'), array(
+        return $app['user.templating']->render($this->getTemplate('forgot-password'), array(
             'layout_template' => $this->getTemplate('layout'),
             'email' => $email,
             'fromAddress' => $app['user.mailer']->getFromAddress(),
@@ -323,7 +323,7 @@ class UserController
             }
         }
 
-        return $app['twig']->render($this->getTemplate('reset-password'), array(
+        return $app['user.templating']->render($this->getTemplate('reset-password'), array(
             'layout_template' => $this->getTemplate('layout'),
             'user' => $user,
             'token' => $token,
@@ -380,7 +380,7 @@ class UserController
             throw new NotFoundHttpException('That user is disabled (pending email confirmation).');
         }
 
-        return $app['twig']->render($this->getTemplate('view'), array(
+        return $app['user.templating']->render($this->getTemplate('view'), array(
             'layout_template' => $this->getTemplate('layout'),
             'user' => $user,
             'imageUrl' => $this->getGravatarUrl($user->getEmail()),
@@ -465,7 +465,7 @@ class UserController
             }
         }
 
-        return $app['twig']->render($this->getTemplate('edit'), array(
+        return $app['user.templating']->render($this->getTemplate('edit'), array(
             'layout_template' => $this->getTemplate('layout'),
             'error' => implode("\n", $errors),
             'user' => $user,
@@ -514,7 +514,7 @@ class UserController
             $user->imageUrl = $this->getGravatarUrl($user->getEmail(), 40);
         }
 
-        return $app['twig']->render($this->getTemplate('list'), array(
+        return $app['user.templating']->render($this->getTemplate('list'), array(
             'layout_template' => $this->getTemplate('layout'),
             'users' => $users,
             'paginator' => $paginator,
